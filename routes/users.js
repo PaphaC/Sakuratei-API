@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var http = require('http');
-var randomstring = require("randomstring");
+
 
 
 
@@ -15,8 +15,7 @@ router.post('/register', function(req, res, next) {
     var user = {
         userName : req.body.username,
         eMail : req.body.email,
-        passWord : req.body.pass,
-        token : randomstring.generate()
+        passWord : req.body.pass
     };
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(user));
