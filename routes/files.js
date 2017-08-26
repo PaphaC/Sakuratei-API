@@ -33,17 +33,18 @@ router.post('/upload', function(req, res) {
                 var exten = arr_n[arr_n.length - 1];
 
                 var folder = uploadPath + user[0]._doc._id.toString();
-                if (!fs.existsSync(folder)) {
+                if (!fs.existsSync(folder)){
                     fs.mkdirSync(folder);
                 }
-
-                var fullFilePath = folder + '/' + randomstring.generate() + "." + exten;
+                var random = randomstring.generate();
+                var fullFilePath = folder + '/' + random + "." + exten;
 
                 uploadedFile.mv(fullFilePath, function (err) {
                     if (err)
                         return res.status(500).send(err);
 
-                    res.send(JSON.stringify({"path ": fullFilePath}));
+                    //res.send(JSON.stringify({"success": "true", "path" : fullFilePath}));
+                    res.redirect('http://sakuratai.ga/'+ user[0]._doc._id.toString()+'/'+random+'.'+exten);
                 });
             }
         });
