@@ -43,7 +43,7 @@ router.post('/upload', function(req, res) {
                     if (err)
                         return res.status(500).send(err);
 
-                    res.send(JSON.stringify({"success": "true"}));
+                    res.send(JSON.stringify({"path ": fullFilePath}));
                 });
             }
         });
