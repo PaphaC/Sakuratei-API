@@ -14,14 +14,14 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', function(req, res) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+    Account.register(new Account({ username : req.body.username, email : req.body.email, userToken:  randomstring.generate()}), req.body.password, function(err, account) {
         if (err) {
-            return res.render('register', { account : account });
+            res.send(JSON.stringify({ "error": "Username already in use !" }));
+        } else {
+            passport.authenticate('local')(req, res, function () {
+                res.send(JSON.stringify({"token": account.userToken}));
+            });
         }
-
-        passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-        });
     });
 });
 
