@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');
+"use strict";
 
-var Account = new Schema({
+const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
+const Schema = mongoose.Schema;
+
+const Account = new Schema({
     username: String,
     password: String,
     email: String,
