@@ -1,11 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var randomstring = require("randomstring");
-var uploadPath = 'public_upload/';
-var db = require('mongoose');
-var fs = require('fs');
+"use strict";
 
-var Account = new db.Schema({
+const express = require('express');
+const router = express.Router();
+const randomstring = require("randomstring");
+const uploadPath = 'public_upload/';
+const db = require('mongoose');
+const fs = require('fs');
+
+const Account = new db.Schema({
     username: String,
     password: String,
     email: String,
@@ -13,35 +15,37 @@ var Account = new db.Schema({
 });
 
 db.connect('mongodb://localhost/sakuratei');
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
     res.render('index', { user : req.user });
 });
 
-router.post('/upload', function(req, res) {
-    if(req.body.token) {
-        var accountModel = db.model('accounts', Account);
-        user = accountModel.find({userToken: req.body.token}, function(err, user){
-            if(user.length > 0) {
+router.post('/upload', (req, res) => {
+    if (req.body.token) {
+        let accountModel = db.model('accounts', Account);
+        user = accountModel.find({userToken: req.body.token}, (err, user) => {
+            if (user.length > 0) {
                 console.log('into mongoose findone');
-                if (!req.files)
-                    return res.status(400).send('No files were uploaded.');
+                if (!req.files) {
+                  return res.status(400).send('No files were uploaded.');
+                }
 
                 // Taking the first File of the array
                 let uploadedFile = req.files.file;
 
-                var arr_n = uploadedFile.name.split('.');
-                var exten = arr_n[arr_n.length - 1];
+                let arr_n = uploadedFile.name.split('.');
+                let exten = arr_n[arr_n.length - 1];
 
-                var folder = uploadPath + user[0]._doc._id.toString();
+                let folder = uploadPath + user[0]._doc._id.toString();
                 if (!fs.existsSync(folder)){
                     fs.mkdirSync(folder);
                 }
-                var random = randomstring.generate();
-                var fullFilePath = folder + '/' + random + "." + exten;
+                let random = randomstring.generate();
+                let fullFilePath = folder + '/' + random + "." + exten;
 
-                uploadedFile.mv(fullFilePath, function (err) {
-                    if (err)
-                        return res.status(500).send(err);
+                uploadedFile.mv(fullFilePath, (err) => {
+                    if (err) {
+                      return res.status(500).send(err);
+                    }
 
                     //res.send(JSON.stringify({"success": "true", "path" : fullFilePath}));
                     res.redirect('http://sakuratai.ga/'+ user[0]._doc._id.toString()+'/'+random+'.'+exten);
