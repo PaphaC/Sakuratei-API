@@ -8,12 +8,13 @@
 const app = require('../app');
 const debug = require('debug')('sakuratei-api:server');
 const http = require('http');
+const conf = require('../conf/conf.json')
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(conf.port || '3000');
 app.set('port', port);
 
 /**

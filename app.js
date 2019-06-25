@@ -43,7 +43,10 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 // mongoose
-mongoose.connect('mongodb://localhost/sakuratei');
+mongoose.connect('mongodb://localhost/sakuratei', {
+  useMongoClient: true,
+  /* other options */
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

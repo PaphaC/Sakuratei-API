@@ -1,0 +1,9 @@
+{
+    "appFront": {
+      "baseUrl": "http://localhost/",
+      "port": "80"
+    },
+    "baseUrl" : "localhost",
+    "port" : 3000,
+    "baseDir": "./public_upload/"
+}

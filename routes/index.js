@@ -1,10 +1,23 @@
 "use strict";
 
-const Account = require('../models/accounts');
+const accountM = require('../models/accounts');
 const express = require('express');
 const passport = require('passport');
 const randomstring = require("randomstring");
+const db = require('mongoose');
 const router = express.Router();
+const Schema = db.Schema;
+
+db.connect('mongodb://localhost/sakuratei', {
+  useMongoClient: true,
+  /* other options */
+});
+const Account = new Schema({
+    username: String,
+    password: String,
+    //email: String,
+    userToken: String,
+});
 
 
 router.get('/', (req, res) => {
@@ -16,9 +29,10 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-    Account.register(new Account({
+    accountM.register(new Account({
         username : req.body.username,
-        email : req.body.email,
+        //email : req.body.email,
+        password: req.body.password,
         userToken: randomstring.generate()
     }), req.body.password, (err, account) => {
         if (err) {
@@ -31,26 +45,14 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.get('/login', (req, res) => {
-    res.render('login', { user : req.user });
-});
-
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', function(err, user, info) {
+router.post('/login', (req, res) => {
+    let accountModel = db.model('accounts', Account);
+    accountModel.find({password: req.body.password, username: req.body.username}, (err, user) => {
         if (err) {
-          return next(err);
+          return res.status(500).send(err);
         }
-        if (!user) {
-          return res.redirect('/login');
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-              return next(err);
-            }
-            res.send(JSON.stringify({"token": user.userToken}));
-        });
-    })
-    (req, res, next);
+        res.send({token: user[0].userToken});
+    });
 });
 
 router.get('/logout', (req, res) => {

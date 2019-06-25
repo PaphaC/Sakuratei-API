@@ -7,10 +7,11 @@ const Schema = mongoose.Schema;
 const Account = new Schema({
     username: String,
     password: String,
-    email: String,
+    //email: String,
     userToken: String,
 });
 
 Account.plugin(passportLocalMongoose);
+
 
 module.exports = mongoose.model('Account', Account);
