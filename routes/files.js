@@ -11,7 +11,7 @@ const uploadPath = conf.baseDir;
 
 const Account = new db.Schema({
     username: String,
-    password: String,
+    //password: String,
     //email: String,
     userToken: String,
 });

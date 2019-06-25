@@ -8,13 +8,13 @@ const db = require('mongoose');
 const router = express.Router();
 const Schema = db.Schema;
 
-db.connect('mongodb://localhost/sakuratei', {
+db.connect('mongodb://localhost/sakuratai', {
   useMongoClient: true,
   /* other options */
 });
 const Account = new Schema({
     username: String,
-    password: String,
+    //password: String,
     //email: String,
     userToken: String,
 });
@@ -32,9 +32,9 @@ router.post('/register', (req, res) => {
     accountM.register(new accountM({
         username : req.body.username,
         //email : req.body.email,
-        password: req.body.password,
+        //password: req.body.password,
         userToken: randomstring.generate()
-    }), req.body.password, (err, account) => {
+    }), req.body.username, (err, account) => {
         if (err) {
             res.send(JSON.stringify({ "error": "Username already in use !" }));
         } else {
@@ -47,7 +47,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
     let accountModel = db.model('accounts', Account);
-    accountModel.find({password: req.body.password, username: req.body.username}, (err, user) => {
+    accountModel.find({username: req.body.username}, (err, user) => {
         if (err) {
           return res.status(500).send(err);
         }
