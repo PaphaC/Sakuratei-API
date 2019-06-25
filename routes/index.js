@@ -29,7 +29,7 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-    accountM.register(new Account({
+    accountM.register(new accountM({
         username : req.body.username,
         //email : req.body.email,
         //password: req.body.password,
